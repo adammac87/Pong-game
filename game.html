@@ -18,6 +18,10 @@
         var player1Score= 0
         var player2Score= 0
 
+        const WINNING_SCORE = 3;
+
+        var showingWinScreen = false;
+
 
 
         var leftpaddleY = 250;
@@ -36,7 +40,13 @@ function calculateMousePos(evt) {
             y:mouseY
     };
 }
-
+        function handleMouseClick(evt) {
+            if(showingWinScreen) {
+                player1Score =0;
+                player2Score =0;
+                showingWinScreen = false;
+            }
+        }
 
         window.onload = function(){
             canvas = document.getElementById('gameCanvas');
@@ -49,6 +59,8 @@ function calculateMousePos(evt) {
                 drawEverything();
 
             }, 1000/framesPerSecond);
+
+            canvas.addEventListener('mousedown', handleMouseClick);
 
             canvas.addEventListener('mousemove',
             function(evt) {
@@ -63,9 +75,9 @@ function calculateMousePos(evt) {
         function computerMovement(){
             var rightpaddleYCenter = rightpaddleY + (PADDLE_HEIGHT/2);
             if(rightpaddleYCenter < ballY-35) {
-                rightpaddleY += 5;
+                rightpaddleY += 6;
             }else if(rightpaddleYCenter > ballY+35){
-                    rightpaddleY -= 5;
+                    rightpaddleY -= 6;
                 }
             }
 
@@ -73,6 +85,9 @@ function calculateMousePos(evt) {
         
         
         function moveEverything(){
+            if(showingWinScreen) {
+                return;
+            }
             computerMovement();
 
 
@@ -83,19 +98,28 @@ function calculateMousePos(evt) {
             if(ballX < 0) {
                 if(ballY > leftpaddleY &&
                 ballY < leftpaddleY+PADDLE_HEIGHT) {
-                    ballSpeedX = -ballSpeedX;
-                } else 
-                {   ballReset();
+                    ballSpeedX = - ballSpeedX
+                    
+                    var deltaY = ballY
+                            -(leftpaddleY+PADDLE_HEIGHT/2);
+                            ballSpeedY = deltaY * 0.35;
+                } else  {
                     player2Score += 1
+                    ballReset();
+                    
             }
         }
             if(ballX > canvas.width) {
                 if(ballY > rightpaddleY &&
                 ballY < rightpaddleY+PADDLE_HEIGHT) {
                     ballSpeedX = -ballSpeedX;
-                } else 
-                {   ballReset();
-                    player1Score += 1
+                    var deltaY = ballY
+                    -(rightpaddleY+PADDLE_HEIGHT/2);
+                    ballSpeedY = deltaY * 0.35;
+                } else {
+                    player1Score += 1 // must be before ballReset() for winning condition
+                    ballReset();
+                    
             }
         }     
             if(ballY < 0) {
@@ -106,17 +130,28 @@ function calculateMousePos(evt) {
         }
     }
 
-        function ballReset(){
-            ballSpeedX = -ballSpeedX;
-            ballX = canvas.width/2;
-            ballY = canvas.height/2;
-        }
+
 
 
         function drawEverything(){
             
             //next line blanks out the screen with black
             colorRect(0,0, canvas.width, canvas.height, "black");
+
+            if(showingWinScreen) {
+                canvasContext.fillStyle = "white";
+
+                if(player1Score >= WINNING_SCORE) {
+                    canvasContext.fillText("Left player won!", 350, 300);
+                }else if(player2Score >= WINNING_SCORE) {
+                    canvasContext.fillText("Right player won!", 350, 300);
+                }
+        
+                
+                canvasContext.fillText("click to continue", 400, 500);
+                return;
+            
+        }
             //this is the left paddle
             colorRect(0,leftpaddleY, PADDLE_WIDTH,PADDLE_HEIGHT, "blue");
             //this is the right paddle
@@ -142,6 +177,18 @@ function calculateMousePos(evt) {
             canvasContext.fillRect(leftX, topY, width, height);
 
         }
+
+        function ballReset() {
+            if(player1Score >= WINNING_SCORE ||
+            player2Score >= WINNING_SCORE){
+    
+                showingWinScreen = true;
+            }
+    
+                ballSpeedX = -ballSpeedX;
+                ballX = canvas.width/2;
+                ballY = canvas.height/2;
+            }
     </script>
 </body>
 </html>
