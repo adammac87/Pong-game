@@ -10,23 +10,27 @@
 
     <script>
         var canvas, canvasContext;
+        var ballX = 50;
+        var ballY;
 
         window.onload = function(){
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
-            drawEverything();
 
-
+            setInterval(drawEverything, 1000);
 
         }
 
         function drawEverything(){
+            ballX = ballX + 10;
+
+            console.log(ballX)
             canvasContext.fillStyle = 'black';
             canvasContext.fillRect(0,0, canvas.width, canvas.height);
             canvasContext.fillStyle = 'green';
             canvasContext.fillRect(375,275, 50, 50);
             canvasContext.fillStyle = 'red';
-            canvasContext.fillRect(600,275, 50, 50);
+            canvasContext.fillRect(ballX,275, 50, 50);
         }
     </script>
 </body>
