@@ -11,13 +11,19 @@
     <script>
         var canvas, canvasContext;
         var ballX = 50;
-        var ballSpeedX = 5;
+        var ballSpeedX = 10;
         var ballY = 50;
         var ballSpeedY = 4;
+
+        var player1Score= 0
+        var player2Score= 0
+
+
 
         var leftpaddleY = 250;
         var rightpaddleY = 250;
         const PADDLE_HEIGHT = 100;
+        const PADDLE_WIDTH = 12;
 
         //evt= event
 function calculateMousePos(evt) {
@@ -51,39 +57,54 @@ function calculateMousePos(evt) {
             });
 
 
-
-
-
-
-
         }
         //everything in here is to do with how the ball interacts with its surroundings
+        
+        function computerMovement(){
+            var rightpaddleYCenter = rightpaddleY + (PADDLE_HEIGHT/2);
+            if(rightpaddleYCenter < ballY-35) {
+                rightpaddleY += 5;
+            }else if(rightpaddleYCenter > ballY+35){
+                    rightpaddleY -= 5;
+                }
+            }
+
+        
+        
+        
         function moveEverything(){
+            computerMovement();
+
+
+
             ballX = ballX + ballSpeedX;
             ballY = ballY + ballSpeedY;
 
-            if(ballX > canvas.width) {
-                ballSpeedX = -ballSpeedX;
-            }
             if(ballX < 0) {
                 if(ballY > leftpaddleY &&
                 ballY < leftpaddleY+PADDLE_HEIGHT) {
-                    ballSpeedX = - ballSpeedX;
-
-                } else {
-
-                
-                ballReset();
+                    ballSpeedX = -ballSpeedX;
+                } else 
+                {   ballReset();
+                    player2Score += 1
             }
         }
-
-            if(ballY > canvas.height) {
-                ballSpeedY = -ballSpeedY;
+            if(ballX > canvas.width) {
+                if(ballY > rightpaddleY &&
+                ballY < rightpaddleY+PADDLE_HEIGHT) {
+                    ballSpeedX = -ballSpeedX;
+                } else 
+                {   ballReset();
+                    player1Score += 1
             }
+        }     
             if(ballY < 0) {
                 ballSpeedY = -ballSpeedY;
             }
+            if(ballY > canvas.height) {
+                ballSpeedY = -ballSpeedY;
         }
+    }
 
         function ballReset(){
             ballSpeedX = -ballSpeedX;
@@ -97,11 +118,14 @@ function calculateMousePos(evt) {
             //next line blanks out the screen with black
             colorRect(0,0, canvas.width, canvas.height, "black");
             //this is the left paddle
-            colorRect(0,leftpaddleY, 10,PADDLE_HEIGHT, "blue");
+            colorRect(0,leftpaddleY, PADDLE_WIDTH,PADDLE_HEIGHT, "blue");
             //this is the right paddle
-            colorRect(790 ,rightpaddleY, 10,PADDLE_HEIGHT, "yellow");
+            colorRect(canvas.width - PADDLE_WIDTH ,rightpaddleY, PADDLE_WIDTH,PADDLE_HEIGHT, "red");
             //this is the white ball
             colorCircle(ballX, ballY, 10, "white")
+
+            canvasContext.fillText(player1Score, 100 , 100)
+            canvasContext.fillText(player2Score, canvas.width-100 , 100)
  
         }
 
