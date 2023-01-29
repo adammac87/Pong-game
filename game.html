@@ -11,6 +11,7 @@
     <script>
         var canvas, canvasContext;
         var ballX = 50;
+        var ballSpeedx = 5;
         var ballY;
 
         window.onload = function(){
@@ -22,12 +23,19 @@
             setInterval(function(){
                 moveEverything();
                 drawEverything();
+
             }, 1000/framesPerSecond);
 
         }
         function moveEverything(){
-            ballX = ballX + 3;
+            ballX = ballX + ballSpeedx;
 
+            if(ballX > canvas.width) {
+                ballSpeedx = -ballSpeedx;
+            }
+            if(ballX < 0) {
+                ballSpeedx = -ballSpeedx;
+            }
         }
 
         function drawEverything(){
