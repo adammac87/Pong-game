@@ -4,7 +4,7 @@
 
 </head>
 
-    This text <b>yoirhephjdfph</b>
+
 <body>
         <canvas id="gameCanvas" width="800" height="600"></canvas>
 
@@ -14,6 +14,19 @@
         window.onload = function(){
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
+            drawEverything();
+
+
+
+        }
+
+        function drawEverything(){
+            canvasContext.fillStyle = 'black';
+            canvasContext.fillRect(0,0, canvas.width, canvas.height);
+            canvasContext.fillStyle = 'green';
+            canvasContext.fillRect(375,275, 50, 50);
+            canvasContext.fillStyle = 'red';
+            canvasContext.fillRect(600,275, 50, 50);
         }
     </script>
 </body>
