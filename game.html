@@ -27,6 +27,7 @@
             }, 1000/framesPerSecond);
 
         }
+        //everything in here is to do with how the ball interacts with its surroundings
         function moveEverything(){
             ballX = ballX + ballSpeedx;
 
@@ -40,14 +41,23 @@
 
         function drawEverything(){
             
+            //next line blanks out the screen with black
+            colorRect(0,0, canvas.width, canvas.height, "black");
+            //this is the blue paddle
+            colorRect(0,275, 10,75, "blue");
+            //this is the yellow paddle
+            colorRect(790,275, 10,75, "yellow");
+            //this is the white ball
+            canvasContext.fillStyle = "white";
+            canvasContext.beginPath();
+            canvasContext.arc(ballX , 100 , 10 ,0 ,Math.PI*2, true);
+            canvasContext.fill();
+        }
+            //function for defining details of shapes like the paddle and ball
+        function colorRect(leftX, topY, width, height, drawColor){
+            canvasContext.fillStyle = drawColor;
+            canvasContext.fillRect(leftX, topY, width, height);
 
-            
-            canvasContext.fillStyle = 'black';
-            canvasContext.fillRect(0,0, canvas.width, canvas.height);
-            canvasContext.fillStyle = 'green';
-            canvasContext.fillRect(0,275, 10,75);
-            canvasContext.fillStyle = 'red';
-            canvasContext.fillRect(ballX,275, 10, 10);
         }
     </script>
 </body>
